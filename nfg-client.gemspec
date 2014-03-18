@@ -8,9 +8,8 @@ Gem::Specification.new do |gem|
   gem.version       = NFGClient::VERSION
   gem.authors       = ["Antonio Ruano Cuesta"]
   gem.email         = ["ruanest@gmail.com"]
-  gem.description   = %q{Client to interact with Network for Good services through HTTP POST requests}
-  gem.summary       = %q{Client to interact with Network for Good services}
-  gem.homepage      = ""
+  gem.description   = %q{Client for the Network for Good SOAP API.}
+  gem.homepage      = "https://github.com/aruanoc/nfg-client"
 
   gem.files         = `git ls-files`.split($/)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
