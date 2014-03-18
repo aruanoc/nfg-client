@@ -10,6 +10,7 @@ Gem::Specification.new do |gem|
   gem.email         = ["ruanest@gmail.com"]
   gem.description   = %q{Client for the Network for Good SOAP API.}
   gem.summary       = gem.description
+  gem.licenses      = %w(MIT)
   gem.homepage      = "https://github.com/aruanoc/nfg-client"
 
   gem.files         = `git ls-files`.split($/)
