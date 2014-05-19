@@ -24,26 +24,15 @@ module NFGClient
     def nfg_soap_request(nfg_method, params, use_sandbox = false)
       if (nfg_method.is_a? String) && (params.is_a? Hash)
         # Build SOAP 1.2 request
-        soap_request = build_nfg_soap_request(nfg_method,params)
+        soap_request = build_nfg_soap_request(nfg_method,params)  
         
-        # Build request URL & header
-        host = use_sandbox ? @@nfg_urls['sandbox']['host'] : @@nfg_urls['production']['host']
-        url = use_sandbox ? @@nfg_urls['sandbox']['url'] : @@nfg_urls['production']['url']
-        headers = {
-          'Host' => host,
-          'Content-Type' => 'application/soap+xml; charset=utf-8',
-          'Content-Length' => soap_request.length.to_s,
-          'SOAPAction' => "#{url}/#{nfg_method}".gsub('.asmx','')
-        }
+        headers = format_headers(nfg_method, soap_request)
 
         return_value = Hash.new
 
         # Being HTTP Post
         begin
-          uri = URI.parse(url)
-          https_conn = Net::HTTP.new(uri.host, uri.port)
-          https_conn.use_ssl = true
-          response = https_conn.post(uri.path, soap_request, headers)          
+          response = ssl_post(soap_request, headers)         
           if response.code == '200'
             parsed = REXML::Document.new(response.body)
             #return response.body
@@ -78,6 +67,32 @@ module NFGClient
 
     def get_nfg_soap_request_template
       "<?xml version=\"1.0\" encoding=\"utf-8\"?><soap12:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap12=\"http://www.w3.org/2003/05/soap-envelope\"><soap12:Body>|body|</soap12:Body></soap12:Envelope>"
+    end
+
+    def ssl_post(soap_request, headers)
+       uri = URI.parse(url)
+       https_conn = Net::HTTP.new(uri.host, uri.port)
+       https_conn.use_ssl = true
+       https_conn.post(uri.path, soap_request, headers)           
+    end
+
+    def format_headers(nfg_method, soap_request)
+      {
+        'Host' => host,
+        'Content-Type' => 'application/soap+xml; charset=utf-8',
+        'Content-Length' => soap_request.length.to_s,
+        'SOAPAction' => "#{url}/#{nfg_method}".gsub('.asmx','')
+      }
+    end
+
+    def host
+      return @@nfg_urls['sandbox']['host'] if @use_sandbox
+      @@nfg_urls['production']['host']
+    end
+
+    def url
+      return @@nfg_urls['sandbox']['url'] if @use_sandbox
+      @@nfg_urls['production']['url']
     end
 
     def hash_to_xml(hash)
