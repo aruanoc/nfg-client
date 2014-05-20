@@ -1,5 +1,6 @@
 require 'simplecov'
 require 'mocha/api'
+require 'andand'
 
 require 'nfg-client'
 
