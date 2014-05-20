@@ -1,5 +1,5 @@
 require 'spec_helper'
-require 'unit/response_stubs/create_cof'
+require 'unit/response_stubs/create_cof_stubs'
 
 describe NFGClient::Client do
   let(:nfg_client) { NFGClient.new('aiduuad', 'aooaid', 'sosois', 'ksidi', true) }
@@ -10,7 +10,7 @@ describe NFGClient::Client do
         nfg_client.expects(:ssl_post).returns(nfg_response('200',successful_create_cof_response('ISUDUD')))
         expect(subject['StatusCode']).to eq('Success')
         expect(subject['DonorToken']).to eq('ISUDUD')
-        expect(subject['COFId']).to eq('282883')
+        expect(subject['COFId']).to eq('1111111')
       end
     end
 
@@ -24,7 +24,7 @@ describe NFGClient::Client do
     context "with an unsuccessful response" do
       it "should return the appropriate error with new COFid" do
         nfg_client.expects(:ssl_post).returns(nfg_response('200',unsuccessful_create_cof_response('ISUDUD')))
-        expect(subject['StatusCode']).to eq('ValidationFailed')   
+        expect(subject['StatusCode']).to eq('ChargeFailed')   
         expect(subject['DonorToken']).to eq('ISUDUD')
 
       end

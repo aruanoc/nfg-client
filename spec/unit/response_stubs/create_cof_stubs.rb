@@ -8,7 +8,7 @@ def successful_create_cof_response(donor_token)
         <CreateCOFResponse xmlns="http://api.networkforgood.org/partnerdonationservice">
           <CreateCOFResult>
             <DonorToken>#{donor_token}</DonorToken>
-            <CofId>282883</CofId>
+            <CofId>1111111</CofId>
             <StatusCode>Success</StatusCode>
             <Message></Message>
             <ErrorDetails></ErrorDetails>
@@ -28,12 +28,12 @@ def unsuccessful_create_cof_response(donor_token)
         <CreateCOFResponse xmlns="http://api.networkforgood.org/partnerdonationservice">
           <CreateCOFResult>
             <DonorToken>#{donor_token}</DonorToken>
-            <StatusCode>ValidationFailed</StatusCode>
-            <CofId>282883</CofId>
-            <Message>UserNotFound - No existing NFG user record associated with the specified DonorToken</Message>
+            <StatusCode>ChargeFailed</StatusCode>
+            <CofId></CofId>
+            <Message>InvalidCreditCardNumber - Credit Card Number failed validation</Message>
             <ErrorDetails>
               <ErrorInfo>
-                <ErrCode>UserNotFound</ErrCode>
+                <ErrCode>InvalidCreditCardNumber</ErrCode>
                 <ErrData></ErrData>
               </ErrorInfo>
             </ErrorDetails>
@@ -47,6 +47,7 @@ end
 
 def create_cof_params
   {
+    DonorIpAddress: '198.168.200.200',
     DonorToken: 'AIH3939',
     DonorFirstName: 'John',
     DonorLastName: 'Smith',
