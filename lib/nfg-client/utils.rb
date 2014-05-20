@@ -98,8 +98,7 @@ module NFGClient
     def hash_to_xml(hash)
       hash.map do |k, v|
         text = (v.is_a? Hash) ? hash_to_xml(v) : v
-        xml_elem = (v.is_a? Hash) ? k.gsub(/(\d)/, "") : k
-        "<%s>%s</%s>" % [xml_elem, text, xml_elem]
+        "<%s>%s</%s>" % [k, text, k]
       end.join
     end
   end
