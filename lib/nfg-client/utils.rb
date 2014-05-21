@@ -50,6 +50,7 @@ module NFGClient
             return_value['ErrorDetails'] = response.body
           end
         rescue StandardError => e
+          p e
           return_value['StatusCode'] = 'UnexpectedError'
           return_value['Message'] = e
           return_value['ErrorDetails'] = e.backtrace.join(' ')
