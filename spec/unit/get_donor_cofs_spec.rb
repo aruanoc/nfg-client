@@ -6,7 +6,7 @@ describe NFGClient::Client do
   subject { nfg_client.get_donor_cofs(get_donor_cofs_params) }
   describe "#get_donor_cofs" do
     context "with a successful response" do
-      it "should return a hash with a new COFId" do
+      it "should return a hash with a an array of COFs" do
         nfg_client.expects(:ssl_post).returns(nfg_response('200',successful_get_donor_cofs_response('ISUDUD')))
         expect(subject['StatusCode']).to eq('Success')
         expect(subject['DonorToken']).to eq('ISUDUD')
@@ -24,7 +24,7 @@ describe NFGClient::Client do
     end
 
     context "with an unsuccessful response" do
-      it "should return the appropriate error with new COFid" do
+      it "should return the appropriate error with the DonorToken" do
         nfg_client.expects(:ssl_post).returns(nfg_response('200',unsuccessful_get_donor_cofs_response('ISUDUD')))
         expect(subject['StatusCode']).to eq('ValidationFailed')
         expect(subject['DonorToken']).to eq('ISUDUD')
