@@ -112,6 +112,7 @@ module NFGClient
       if response.is_a? REXML::Element
         if response.elements['ErrorDetails'].elements['ErrorInfo'].nil?
           {
+            'StatusCode' => 'Success',
             'Message' => response.elements['Message'].get_text.to_s,
             'ErrorDetails' => response.elements['ErrorDetails'].get_text.to_s,
             'CallDuration' => response.elements['CallDuration'].get_text.to_s,
@@ -122,6 +123,7 @@ module NFGClient
           }
         else
           {
+            'StatusCode' => 'ValidationFailed',
             'Message' => response.elements['Message'].get_text.to_s,
             'ErrorDetails' => {
               'ErrorInfo' => {
