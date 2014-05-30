@@ -24,15 +24,15 @@ module NFGClient
     def nfg_soap_request(nfg_method, params, use_sandbox = false)
       if (nfg_method.is_a? String) && (params.is_a? Hash)
         # Build SOAP 1.2 request
-        soap_request = build_nfg_soap_request(nfg_method,params)  
-        
+        soap_request = build_nfg_soap_request(nfg_method,params)
+
         headers = format_headers(nfg_method, soap_request)
 
         return_value = Hash.new
 
         # Being HTTP Post
         begin
-          response = ssl_post(soap_request, headers)         
+          response = ssl_post(soap_request, headers)
           if response.code == '200'
             parsed = REXML::Document.new(response.body)
             #return response.body
@@ -60,7 +60,7 @@ module NFGClient
       else
         raise ArgumentError.new('http_post requires a nfg_method and a hash of params')
       end
-    end   
+    end
 
     def build_nfg_soap_request(nfg_method, params)
       get_nfg_soap_request_template.gsub('|body|',"<#{nfg_method} xmlns=\"http://api.networkforgood.org/partnerdonationservice\">#{hash_to_xml(params)}</#{nfg_method}>")
@@ -74,7 +74,7 @@ module NFGClient
        uri = URI.parse(url)
        https_conn = Net::HTTP.new(uri.host, uri.port)
        https_conn.use_ssl = true
-       https_conn.post(uri.path, soap_request, headers)           
+       https_conn.post(uri.path, soap_request, headers)
     end
 
     def format_headers(nfg_method, soap_request)
@@ -101,6 +101,19 @@ module NFGClient
         text = (v.is_a? Hash) ? hash_to_xml(v) : v
         "<%s>%s</%s>" % [k, text, k]
       end.join
+    end
+
+    def requires!(hash, *params)
+      params.each do |param|
+        if param.is_a?(Array)
+          raise ArgumentError.new("Missing required parameter: #{param.first}") unless hash.has_key?(param.first)
+
+          valid_options = param[1..-1]
+          raise ArgumentError.new("Parameter: #{param.first} must be one of #{valid_options.to_sentence(:words_connector => 'or')}") unless valid_options.include?(hash[param.first])
+        else
+          raise ArgumentError.new("Missing required parameter: #{param}") unless hash.has_key?(param)
+        end
+      end
     end
   end
 end

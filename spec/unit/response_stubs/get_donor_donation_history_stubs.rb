@@ -63,19 +63,6 @@ end
 
 def get_donor_donation_history_params
   {
-    DonationLineItems: {
-      DonationItem: {
-        NpoEin: '54-545454',
-        Designation: 'annual_fund',
-        Dedication: 'For my grandfather',
-        donorVis: 'ProvideAll',
-        ItemAmount: 100.00,
-        RecurType: 'NotRecurring',
-        AddOrDeduct: 'Add',
-        TransactionType: 'Donation'
-      }
-    },
-    TipAmount: 3.00,
-    CardType: 'Visa'
+    DonorToken: 239949
   }
 end
