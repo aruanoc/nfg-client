@@ -97,10 +97,3 @@ def unsuccessful_get_donation_report_response
   XML
 end
 
-def get_donation_report_params
-  {
-    StartDate: '2014-01-01 00:00:00',
-    EndDate: '2014-01-01 12:00:00',
-    DonationReportType: 'All'
-  }
-end

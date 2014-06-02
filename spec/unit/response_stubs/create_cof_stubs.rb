@@ -1,7 +1,7 @@
 require 'unit/response_stubs/spec_response_helpers'
 
 def successful_create_cof_response(donor_token)
-  <<-XML  
+  <<-XML
     <?xml version="1.0" encoding="utf-8"?>
     <soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
       <soap:Body>
@@ -21,7 +21,7 @@ def successful_create_cof_response(donor_token)
 end
 
 def unsuccessful_create_cof_response(donor_token)
-  <<-XML  
+  <<-XML
     <?xml version="1.0" encoding="utf-8"?>
     <soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
       <soap:Body>
@@ -43,27 +43,4 @@ def unsuccessful_create_cof_response(donor_token)
       </soap:Body>
     </soap:Envelope>
   XML
-end
-
-def create_cof_params
-  {
-    DonorIpAddress: '198.168.200.200',
-    DonorToken: 'AIH3939',
-    DonorFirstName: 'John',
-    DonorLastName: 'Smith',
-    DonorEmail: 'john@smith.com',
-    DonorAddress1: '1 Address Way',
-    DonorAddress2: '',
-    DonorCity: 'Baltimore',
-    DonorState: 'MD',
-    DonorZip: '21210',
-    DonorCountry: 'USA',
-    DonorPhone: '410-544-8778',
-    CardType: 'Visa',
-    NameOnCard: 'John Smith',
-    CardNumber: '4111111111111111',
-    ExpMonth: '12',
-    ExpYear: '15',
-    CSC: '123'
-  }
 end

@@ -47,22 +47,3 @@ def unsuccessful_get_fee_response
     </soap:Envelope>
   XML
 end
-
-def get_fee_params
-  {
-    DonationLineItems: {
-      DonationItem: {
-        NpoEin: '54-545454',
-        Designation: 'annual_fund',
-        Dedication: 'For my grandfather',
-        donorVis: 'ProvideAll',
-        ItemAmount: 100.00,
-        RecurType: 'NotRecurring',
-        AddOrDeduct: 'Add',
-        TransactionType: 'Donation'
-      }
-    },
-    TipAmount: 3.00,
-    CardType: 'Visa'
-  }
-end

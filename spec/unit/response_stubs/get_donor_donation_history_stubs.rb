@@ -60,9 +60,3 @@ def unsuccessful_get_donor_donation_history_response
     </soap:Envelope>
   XML
 end
-
-def get_donor_donation_history_params
-  {
-    DonorToken: 239949
-  }
-end

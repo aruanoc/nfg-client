@@ -64,9 +64,3 @@ def unsuccessful_get_donor_cofs_response(donor_token)
     </soap:Envelope>
   XML
 end
-
-def get_donor_cofs_params
-  {
-    DonorToken: 'AIH3939',
-  }
-end

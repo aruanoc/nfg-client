@@ -40,10 +40,3 @@ def unsuccessful_delete_donor_cof_response
     </soap:Envelope>
   XML
 end
-
-def delete_donor_cof_params
-  {
-    DonorToken: 'AIH3939',
-    COFId: '1111111',
-  }
-end

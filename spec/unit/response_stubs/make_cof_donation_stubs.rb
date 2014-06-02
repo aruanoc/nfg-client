@@ -44,26 +44,3 @@ def unsuccessful_make_cof_donation_response
     </soap:Envelope>
   XML
 end
-
-def make_cof_donation_params
-  {
-    DonationLineItems: {
-      DonationItem: {
-        NpoEin: '54-545454',
-        Designation: 'annual_fund',
-        Dedication: 'For my grandfather',
-        donorVis: 'ProvideAll or ProvideNameAndEmailOnly or Anonymous',
-        ItemAmount: 100.00,
-        RecurType: 'NotRecurring',
-        AddOrDeduct: 'Add',
-        TransactionType: 'Donation'
-      }
-    },
-    TotalAmount: 100.00,
-    TipAmount: 3.00,
-    PartnerTransactionIdentifier: 'my_order_id',
-    DonorIpAddress: '198.168.200.200',
-    DonorToken: 'AIH3939',
-    COFId: '11111111'
-  }
-end
