@@ -19,9 +19,8 @@ module NFGClient
     #
     # Arguments:
     #   params: (Hash)
-
     def create_cof(params)
-      requires!(params, :DonorIpAddress, :DonorFirstName, :DonorLastName, :DonorEmail, :DonorAddress1, :DonorAddress2, :DonorCity, :DonorState, :DonorZip, :DonorCountry, :DonorPhone, :CardType, :NameOnCard, :CardNumber, :ExpMonth, :ExpYear, :CSC,)
+      requires!(params, :DonorIpAddress, :DonorFirstName, :DonorLastName, :DonorEmail, :DonorAddress1, :DonorAddress2, :DonorCity, :DonorState, :DonorZip, :DonorCountry, :DonorPhone, :CardType, :NameOnCard, :CardNumber, :ExpMonth, :ExpYear, :CSC)
       call_params = add_credentials_to_params(params)
       response = nfg_soap_request('CreateCOF', call_params, @use_sandbox)
       if response.is_a? REXML::Element

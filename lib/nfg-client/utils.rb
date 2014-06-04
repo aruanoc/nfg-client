@@ -21,10 +21,12 @@ module NFGClient
     # Arguments:
     #   nfg_method: (String)
     #   params: (Hash)
+    #   use_sandbox: (Boolean)
     def nfg_soap_request(nfg_method, params, use_sandbox = false)
       if (nfg_method.is_a? String) && (params.is_a? Hash)
+        
         # Build SOAP 1.2 request
-        soap_request = build_nfg_soap_request(nfg_method,params)
+        soap_request = build_nfg_soap_request(nfg_method, params)
 
         headers = format_headers(nfg_method, soap_request)
 
@@ -35,7 +37,6 @@ module NFGClient
           response = ssl_post(soap_request, headers)
           if response.code == '200'
             parsed = REXML::Document.new(response.body)
-            #return response.body
             # Build return hash parsing XML response
             if parsed.root.nil?
               return_value['StatusCode'] = 'MissingParameter'
@@ -62,14 +63,21 @@ module NFGClient
       end
     end
 
+    # Returns a complete NFG SOAP request based on the provided target method and params
     def build_nfg_soap_request(nfg_method, params)
       get_nfg_soap_request_template.gsub('|body|',"<#{nfg_method} xmlns=\"http://api.networkforgood.org/partnerdonationservice\">#{hash_to_xml(params)}</#{nfg_method}>")
     end
 
+    # Returns a SOAP template with no body
     def get_nfg_soap_request_template
       "<?xml version=\"1.0\" encoding=\"utf-8\"?><soap12:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap12=\"http://www.w3.org/2003/05/soap-envelope\"><soap12:Body>|body|</soap12:Body></soap12:Envelope>"
     end
 
+    # Makes HTTPS post request with given body (soap_request) and headers
+    #
+    # Arguments:
+    #   soap_request: (String)
+    #   headers: (Hash)
     def ssl_post(soap_request, headers)
        uri = URI.parse(url)
        https_conn = Net::HTTP.new(uri.host, uri.port)
@@ -77,6 +85,11 @@ module NFGClient
        https_conn.post(uri.path, soap_request, headers)
     end
 
+    # Returns NFG friendly headers hash for HTTPS post
+    #
+    # Arguments:
+    #   nfg_method: (String)
+    #   soap_request: (String)
     def format_headers(nfg_method, soap_request)
       {
         'Host' => host,
@@ -86,16 +99,22 @@ module NFGClient
       }
     end
 
+    # Returns NFG target host
     def host
       return @@nfg_urls['sandbox']['host'] if @use_sandbox
       @@nfg_urls['production']['host']
     end
 
+    # Returns NFG target URL
     def url
       return @@nfg_urls['sandbox']['url'] if @use_sandbox
       @@nfg_urls['production']['url']
     end
 
+    # Returns a string containing an XML representation of the given hash
+    #
+    # Arguments:
+    #   hash: (Hash)
     def hash_to_xml(hash)
       hash.map do |k, v|
         text = (v.is_a? Hash) ? hash_to_xml(v) : v
@@ -103,6 +122,11 @@ module NFGClient
       end.join
     end
 
+    # Raises an exception if the required params are not part of the given hash
+    #
+    # Arguments:
+    #   hash: (Hash)
+    #   *params: (Array or Symbol)
     def requires!(hash, *params)
       params.each do |param|
         if param.is_a?(Array)
