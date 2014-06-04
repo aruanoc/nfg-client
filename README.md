@@ -358,3 +358,13 @@ When a call fails (i.e. the "StatusCode" is different than "Success"), it's usua
             "CallDuration" => "x.x",
             ...
     }
+    
+# Contributors
+
+Special thanks to:
+
+- [Tom Hoen](https://github.com/hoenth), for the addition of the test suite and code refactoring.
+
+# Copyright
+
+Copyright (c) 2014 by [Antonio Ruano Cuesta](https://github.com/aruanoc). See [LICENSE](https://github.com/aruanoc/nfg-client/blob/master/LICENSE.md) for details.
