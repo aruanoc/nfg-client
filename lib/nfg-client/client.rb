@@ -20,9 +20,9 @@ module NFGClient
     # Arguments:
     #   params: (Hash)
     def create_cof(params)
-      requires!(params, :DonorIpAddress, :DonorFirstName, :DonorLastName, :DonorEmail, :DonorAddress1, :DonorAddress2, :DonorCity, :DonorState, :DonorZip, :DonorCountry, :DonorPhone, :CardType, :NameOnCard, :CardNumber, :ExpMonth, :ExpYear, :CSC)
+      requires!(params, :DonorToken, :DonorFirstName, :DonorLastName, :DonorEmail, :DonorAddress1, :DonorAddress2, :DonorCity, :DonorState, :DonorZip, :DonorCountry, :DonorPhone, :CardType, :NameOnCard, :CardNumber, :ExpMonth, :ExpYear, :CSC)
       call_params = add_credentials_to_params(params)
-      response = nfg_soap_request('CreateCOF', call_params, @use_sandbox)
+      response = nfg_soap_request('CreateCOF', call_params)
       if response.is_a? REXML::Element
         {
           'StatusCode' => response.elements['StatusCode'].get_text.to_s,
@@ -44,7 +44,7 @@ module NFGClient
     def delete_donor_cof(params)
       requires!(params, :DonorToken, :COFId)
       call_params = add_credentials_to_params(params)
-      response = nfg_soap_request('DeleteDonorCOF', call_params, @use_sandbox)
+      response = nfg_soap_request('DeleteDonorCOF', call_params)
       if response.is_a? REXML::Element
         if response.elements['StatusCode'].get_text.to_s == 'Success'
           {
@@ -78,7 +78,7 @@ module NFGClient
     def get_donor_cofs(params)
       requires!(params, :DonorToken)
       call_params = add_credentials_to_params(params)
-      response = nfg_soap_request('GetDonorCOFs', call_params, @use_sandbox)
+      response = nfg_soap_request('GetDonorCOFs', call_params)
       if response.is_a? REXML::Element
         response_hash = {
           'StatusCode' => response.elements['StatusCode'].get_text.to_s,
@@ -110,9 +110,9 @@ module NFGClient
     # Arguments:
     #   params: (Hash)
     def get_fee(params)
-      requires!(params, :TipAmount, :CardType, :DonationLineItems)
+      requires!(params, :DonationLineItems, :TipAmount, :CardType)
       call_params = add_credentials_to_params(params)
-      response = nfg_soap_request('GetFee', call_params, @use_sandbox)
+      response = nfg_soap_request('GetFee', call_params)
       if response.is_a? REXML::Element
         if response.elements['ErrorDetails'].elements['ErrorInfo'].nil?
           {
@@ -151,9 +151,9 @@ module NFGClient
     # Arguments:
     #   params: (Hash)
     def make_cof_donation(params)
-      requires!(params, :DonationLineItems, :TotalAmount, :TipAmount, :PartnerTransactionIdentifier, :DonorIpAddress, :DonorToken, :COFId)
+      requires!(params, :DonationLineItems, :TotalAmount, :TipAmount, :DonorIpAddress, :DonorToken, :COFId)
       call_params = add_credentials_to_params(params)
-      response = nfg_soap_request('MakeCOFDonation', call_params, @use_sandbox)
+      response = nfg_soap_request('MakeCOFDonation', call_params)
       if response.is_a? REXML::Element
         if response.elements['StatusCode'].get_text.to_s == 'Success'
           {
@@ -189,9 +189,9 @@ module NFGClient
     # Arguments:
     #   params: (Hash)
     def make_donation_add_cof(params)
-      requires!(params, :DonationLineItems, :TotalAmount, :TipAmount, :PartnerTransactionIdentifier, :DonorIpAddress, :DonorToken, :DonorFirstName, :DonorLastName, :DonorEmail, :DonorAddress1, :DonorAddress2, :DonorCity, :DonorState, :DonorZip, :DonorCountry, :DonorPhone, :CardType, :NameOnCard, :CardNumber, :ExpMonth, :ExpYear, :CSC)
+      requires!(params, :DonationLineItems, :TotalAmount, :TipAmount, :DonorIpAddress, :DonorToken, :DonorFirstName, :DonorLastName, :DonorEmail, :DonorAddress1, :DonorAddress2, :DonorCity, :DonorState, :DonorZip, :DonorCountry, :DonorPhone, :CardType, :NameOnCard, :CardNumber, :ExpMonth, :ExpYear, :CSC)
       call_params = add_credentials_to_params(params)
-      response = nfg_soap_request('MakeDonationAddCOF', call_params, @use_sandbox)
+      response = nfg_soap_request('MakeDonationAddCOF', call_params)
       if response.is_a? REXML::Element
         if (response.elements['StatusCode'].get_text.to_s == 'Success') || ((response.elements['StatusCode'].get_text.to_s != 'Success') && response.elements['ErrorDetails'].elements['ErrorInfo'].nil?)
           {
@@ -229,7 +229,7 @@ module NFGClient
     def get_donor_donation_history(params)
       requires!(params, :DonorToken)
       call_params = add_credentials_to_params(params)
-      response = nfg_soap_request('GetDonorDonationHistory', call_params, @use_sandbox)
+      response = nfg_soap_request('GetDonorDonationHistory', call_params)
       if response.is_a? REXML::Element
         response_hash = {
           'StatusCode' => response.elements['StatusCode'].get_text.to_s,
@@ -264,7 +264,7 @@ module NFGClient
     def get_donation_report(params)
       requires!(params, :StartDate, :EndDate, :DonationReportType)
       call_params = add_credentials_to_params(params)
-      response = nfg_soap_request('GetDonationReport', call_params, @use_sandbox)
+      response = nfg_soap_request('GetDonationReport', call_params)
       if response.is_a? REXML::Element
         response_hash = {
           'StatusCode' => response.elements['StatusCode'].get_text.to_s,
