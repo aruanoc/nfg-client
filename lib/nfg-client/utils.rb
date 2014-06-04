@@ -117,7 +117,9 @@ module NFGClient
     def hash_to_xml(hash)
       hash.map do |k, v|
         text = (v.is_a? Hash) ? hash_to_xml(v) : v
-        "<%s>%s</%s>" % [k, text, k]
+        # It removes the digits at the end of each "DonationItem" hash key
+        xml_elem = (v.is_a? Hash) ? k.to_s.gsub(/(\d)/, "") : k
+        "<%s>%s</%s>" % [xml_elem, text, xml_elem]
       end.join
     end
 
