@@ -21,8 +21,7 @@ module NFGClient
     # Arguments:
     #   nfg_method: (String)
     #   params: (Hash)
-    #   use_sandbox: (Boolean)
-    def nfg_soap_request(nfg_method, params, use_sandbox = false)
+    def nfg_soap_request(nfg_method, params)
       if (nfg_method.is_a? String) && (params.is_a? Hash)
         
         # Build SOAP 1.2 request
@@ -130,12 +129,12 @@ module NFGClient
     def requires!(hash, *params)
       params.each do |param|
         if param.is_a?(Array)
-          raise ArgumentError.new("Missing required parameter: #{param.first}") unless hash.has_key?(param.first)
+          raise ArgumentError.new("Missing required parameter: #{param.first}") unless hash.has_key?(param.first) || hash.has_key?(param.first.to_s)
 
           valid_options = param[1..-1]
-          raise ArgumentError.new("Parameter: #{param.first} must be one of #{valid_options.to_sentence(:words_connector => 'or')}") unless valid_options.include?(hash[param.first])
+          raise ArgumentError.new("Parameter: #{param.first} must be one of #{valid_options.to_sentence(:words_connector => 'or')}") unless valid_options.include?(hash[param.first]) || valid_options.include?(hash[param.first.to_s])
         else
-          raise ArgumentError.new("Missing required parameter: #{param}") unless hash.has_key?(param)
+          raise ArgumentError.new("Missing required parameter: #{param}") unless hash.has_key?(param) || hash.has_key?(param.to_s)
         end
       end
     end
