@@ -101,14 +101,15 @@ describe NFGClient do
   end
 
   describe "get_donor_donation_history" do
-    it "should return something" do
+    it "should return the donation history for the donor" do
       result = nfg_client.create_cof(create_cof_params)
       params = make_donation_add_cof_params
       result = nfg_client.make_donation_add_cof(params)
       result =  nfg_client.get_donor_donation_history(DonorToken: params[:DonorToken])
 
       expect(result["StatusCode"]).to eql('Success')
-      expect(result["Donations"]).to eql('Success')
+      expect(result["Donations"].length).to eql(1)
+      expect(result["Donations"].first["ChargeId"]).to_not be_empty
     end
   end
 end
