@@ -23,34 +23,18 @@ module NFGClient
     #   params: (Hash)
     def nfg_soap_request(nfg_method, params)
       if (nfg_method.is_a? String) && (params.is_a? Hash)
-        
+
         # Build SOAP 1.2 request
         soap_request = build_nfg_soap_request(nfg_method, params)
 
         headers = format_headers(nfg_method, soap_request)
 
-        return_value = Hash.new
-
         # Being HTTP Post
         begin
           response = ssl_post(soap_request, headers)
-          if response.code == '200'
-            parsed = REXML::Document.new(response.body)
-            # Build return hash parsing XML response
-            if parsed.root.nil?
-              return_value['StatusCode'] = 'MissingParameter'
-              return_value['Message'] = response.body
-              return_value['ErrorDetails'] = nil
-            else
-              return_value = parsed.root.elements['soap:Body'].elements["#{nfg_method}Response"].elements["#{nfg_method}Result"]
-            end
-          else
-            return_value['StatusCode'] = 'UnexpectedError'
-            return_value['Message'] = response.message
-            return_value['ErrorDetails'] = response.body
-          end
+          return_value = parse_result(response.code, response.body, response.message, nfg_method)
         rescue StandardError => e
-          p e
+          return_value = Hash.new
           return_value['StatusCode'] = 'UnexpectedError'
           return_value['Message'] = e
           return_value['ErrorDetails'] = e.backtrace.join(' ')
@@ -65,6 +49,33 @@ module NFGClient
     # Returns a complete NFG SOAP request based on the provided target method and params
     def build_nfg_soap_request(nfg_method, params)
       get_nfg_soap_request_template.gsub('|body|',"<#{nfg_method} xmlns=\"http://api.networkforgood.org/partnerdonationservice\">#{hash_to_xml(params)}</#{nfg_method}>")
+    end
+
+    # Parses the response code and body and returns and appropriate result hash
+    #
+    # Arguments:
+    #   code: (String)
+    #   body: (XML string)
+    #   message: string
+    #   nfg_method: string
+    def parse_result(code, body, message, nfg_method)
+      return_value = Hash.new
+      if code == '200'
+        parsed = REXML::Document.new(body)
+        # Build return hash parsing XML response
+        if parsed.root.nil?
+          return_value['StatusCode'] = 'MissingParameter'
+          return_value['Message'] = body
+          return_value['ErrorDetails'] = nil
+        else
+          return_value = parsed.root.elements['soap:Body'].elements["#{nfg_method}Response"].elements["#{nfg_method}Result"]
+        end
+      else
+        return_value['StatusCode'] = 'UnexpectedError'
+        return_value['Message'] = message
+        return_value['ErrorDetails'] = body
+      end
+      return_value
     end
 
     # Returns a SOAP template with no body
