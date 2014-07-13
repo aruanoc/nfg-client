@@ -33,7 +33,7 @@ module NFGClient
         # Being HTTP Post
         begin
           response = ssl_post(soap_request, headers)
-          @logger.info response
+          @logger.info " nfg_soap_request succeeded: #{ e.response.body.inspect }"
           return_value = parse_result(response.code, response.body, response.message, nfg_method)
         rescue StandardError => e
           @logger.error " nfg_soap_request failed: #{ e.message }"
