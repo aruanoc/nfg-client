@@ -22,6 +22,7 @@ module NFGClient
     #   nfg_method: (String)
     #   params: (Hash)
     def nfg_soap_request(nfg_method, params)
+      @logger = defined?(Rails) ? Rails.logger : Logger.new(STDOUT)
       if (nfg_method.is_a? String) && (params.is_a? Hash)
 
         # Build SOAP 1.2 request
@@ -32,8 +33,12 @@ module NFGClient
         # Being HTTP Post
         begin
           response = ssl_post(soap_request, headers)
+          @logger.info response
           return_value = parse_result(response.code, response.body, response.message, nfg_method)
         rescue StandardError => e
+          @logger.error " nfg_soap_request failed: #{ e.message }"
+          @logger.error e.backtrace.join(' ')
+
           return_value = Hash.new
           return_value['StatusCode'] = 'UnexpectedError'
           return_value['Message'] = e
