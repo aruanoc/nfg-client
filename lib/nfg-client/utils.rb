@@ -30,6 +30,8 @@ module NFGClient
 
         headers = format_headers(nfg_method, soap_request)
 
+        @logger.info headers
+        @logger.info soap_request
         # Being HTTP Post
         begin
           response = ssl_post(soap_request, headers)
