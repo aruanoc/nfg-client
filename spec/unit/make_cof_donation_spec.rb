@@ -7,7 +7,7 @@ describe NFGClient::Client do
 
   describe "#make_cof_donation" do
     context "with a successful response" do
-      it "should return a hash with a new COFId" do
+      it "should return a hash with the COFId" do
         nfg_client.expects(:ssl_post).returns(nfg_response('200',successful_make_cof_donation_response))
         expect(subject['StatusCode']).to eq('Success')
         expect(subject['COFId']).to eq('1111111')
