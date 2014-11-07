@@ -1,5 +1,7 @@
 require 'net/http'
 require 'rexml/document'
+require 'cgi'
+require 'logger'
 
 module NFGClient
   module Utils
@@ -22,7 +24,7 @@ module NFGClient
     #   nfg_method: (String)
     #   params: (Hash)
     def nfg_soap_request(nfg_method, params)
-      @logger = defined?(Rails) ? Rails.logger : Logger.new(STDOUT)
+      @logger = defined?(Rails) ? Rails.logger : ::Logger.new(STDOUT)
       if (nfg_method.is_a? String) && (params.is_a? Hash)
 
         # Build SOAP 1.2 request
@@ -134,11 +136,20 @@ module NFGClient
     #   hash: (Hash)
     def hash_to_xml(hash)
       hash.map do |k, v|
-        text = (v.is_a? Hash) ? hash_to_xml(v) : v
+        text = (v.is_a? Hash) ? hash_to_xml(v) : encode_if_text(v)
         # It removes the digits at the end of each "DonationItem" hash key
         xml_elem = (v.is_a? Hash) ? k.to_s.gsub(/(\d)/, "") : k
         "<%s>%s</%s>" % [xml_elem, text, xml_elem]
       end.join
+    end
+
+    # HTML Encodes the string if it is text, otherwise, leaves it as is
+    def encode_if_text(item)
+      if item.respond_to?(:gsub)
+        CGI.escapeHTML(item)
+      else
+        item
+      end
     end
 
     # Raises an exception if the required params are not part of the given hash
