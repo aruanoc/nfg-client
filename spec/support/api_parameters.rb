@@ -63,7 +63,7 @@ def get_fee_params(npo_ein = '68-0480736')
         TransactionType: 'Donation'
       }
     },
-    TipAmount: 3.00,
+    TipAmount: 1.00,
     CardType: 'Visa'
   }
 end

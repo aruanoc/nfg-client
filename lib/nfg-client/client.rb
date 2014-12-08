@@ -122,8 +122,8 @@ module NFGClient
             'CallDuration' => response.elements['CallDuration'].get_text.to_s,
             'TotalChargeAmount' => response.elements['TotalChargeAmount'].get_text.to_s,
             'TotalAddFee' => response.elements['TotalAddFee'].get_text.to_s,
-            'TotalDeductFee' => response.elements['TotalChargeAmount'].get_text.to_s,
-            'TipAmount' => response.elements['TotalAddFee'].get_text.to_s
+            'TotalDeductFee' => response.elements['TotalDeductFee'].get_text.to_s,
+            'TipAmount' => response.elements['TipAmount'].get_text.to_s
           }
         else
           {
@@ -138,8 +138,8 @@ module NFGClient
             'CallDuration' => response.elements['CallDuration'].get_text.to_s,
             'TotalChargeAmount' => response.elements['TotalChargeAmount'].get_text.to_s,
             'TotalAddFee' => response.elements['TotalAddFee'].get_text.to_s,
-            'TotalDeductFee' => response.elements['TotalChargeAmount'].get_text.to_s,
-            'TipAmount' => response.elements['TotalAddFee'].get_text.to_s
+            'TotalDeductFee' => response.elements['TotalDeductFee'].get_text.to_s,
+            'TipAmount' => response.elements['TipAmount'].get_text.to_s
           }
         end
       else

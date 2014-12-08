@@ -11,6 +11,9 @@ describe NFGClient::Client do
         nfg_client.expects(:ssl_post).returns(nfg_response('200',successful_get_fee_response))
         expect(subject['StatusCode']).to eq('Success')
         expect(subject['TotalChargeAmount']).to eq("110.00")
+        expect(subject['TotalAddFee']).to eq('9.00')
+        expect(subject['TotalDeductFee']).to eq('0')
+        expect(subject['TipAmount']).to eq('1.00')
       end
     end
 
